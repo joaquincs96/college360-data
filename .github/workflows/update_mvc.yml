@@ -16,17 +16,28 @@ jobs:
         uses: r-lib/actions/setup-r@v2
 
       - name: Install system dependencies
-        run: sudo apt-get install -y libcurl4-openssl-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libgit2-dev
 
       - name: Install R packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Rscript -e 'install.packages(c(
-            "dplyr","purrr","janitor","stringr","scales","remotes"
+            "dplyr","purrr","janitor","stringr","scales",
+            "remotes","httr","jsonlite","xml2"
           ))'
-          Rscript -e 'remotes::install_github("jflancer/bigballR", upgrade = "never")'
-
+          Rscript -e 'remotes::install_github(
+            "jflancer/bigballR",
+            dependencies = TRUE,
+            upgrade = "never"
+          )'
+          Rscript -e 'library(bigballR)'
 
       - name: Run update script
         run: Rscript update_mvc.R
