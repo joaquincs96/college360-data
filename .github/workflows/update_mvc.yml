@@ -2,7 +2,7 @@ name: Update MVC data
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # Todos los días a las 03:00 UTC
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 jobs:
@@ -21,8 +21,9 @@ jobs:
       - name: Install R packages
         run: |
           Rscript -e 'install.packages(c(
-            "bigballR","dplyr","purrr","janitor","stringr","scales"
+            "dplyr","purrr","janitor","stringr","scales","remotes"
           ))'
+          Rscript -e 'remotes::install_github("lbenz730/bigballR")'
 
       - name: Run update script
         run: Rscript update_mvc.R
