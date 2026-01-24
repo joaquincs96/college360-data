@@ -19,9 +19,12 @@ jobs:
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
       - name: Install R packages
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Rscript -e 'install.packages(c("remotes","curl"))'
-          Rscript -e 'remotes::install_github("lbenz730/bigballR")'
+          Rscript -e 'remotes::install_github("jflancer/bigballR", upgrade = "never")'
+
 
       - name: Test bigballR (minimal)
         run: |
